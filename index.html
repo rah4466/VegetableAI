@@ -17,61 +17,22 @@
      crossorigin="anonymous"></script>
 
     <style>
-        /* Custom styles */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Custom file input button style */
-        input[type="file"]::file-selector-button {
-            border-radius: 0.5rem;
-            padding: 0.75rem 1rem;
-            font-weight: 600;
-            background-color: #22c55e;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        input[type="file"]::file-selector-button:hover {
-            background-color: #16a34a;
-        }
-        /* Spinner animation */
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        .spinner {
-            animation: spin 1s linear infinite;
-        }
-        /* Fade-in animation for recipe cards */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .recipe-card {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-        .listen-btn.speaking svg {
-            color: #fb923c;
-        }
-        .listen-btn:disabled, .video-btn:disabled, .share-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        body { font-family: 'Inter', sans-serif; }
+        input[type="file"]::file-selector-button { border-radius: 0.5rem; padding: 0.75rem 1rem; font-weight: 600; background-color: #22c55e; color: white; border: none; cursor: pointer; transition: background-color 0.2s; }
+        input[type="file"]::file-selector-button:hover { background-color: #16a34a; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner { animation: spin 1s linear infinite; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .recipe-card { animation: fadeIn 0.5s ease-out forwards; }
+        .listen-btn.speaking svg { color: #fb923c; }
+        .listen-btn:disabled, .video-btn:disabled, .share-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body class="bg-green-50 text-gray-800">
 
     <header class="bg-white shadow-md">
         <nav class="container mx-auto max-w-4xl p-4 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-            <a href="index.html" class="text-2xl font-bold text-green-700">🥬Tamranga AI</a>
+            <a href="index.html" class="text-2xl font-bold text-green-700">🥬 Vegetable AI</a>
             <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
                 <a href="index.html" class="text-green-600 font-semibold">Home</a>
                 <a href="about.html" class="text-gray-600 hover:text-green-600">About Us</a>
@@ -98,19 +59,19 @@
         </div>
 
         <div class="mt-8">
-            <h3 class="text-xl sm:text-2xl font-bold text-center text-green-800 mb-6">Check Out Some Popular Recipes</h3>
+            <h3 id="popular-recipes-title" class="text-xl sm:text-2xl font-bold text-center text-green-800 mb-6">Check Out Some Popular Recipes</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
-                    <h4 class="text-lg sm:text-xl font-bold text-green-700 mb-2">Aloo Gobi</h4>
-                    <p class="text-sm sm:text-base text-gray-600 mb-4">A classic and comforting North Indian dish loved in every household.</p>
+                    <h4 id="card1-title" class="text-lg sm:text-xl font-bold text-green-700 mb-2">Aloo Gobi</h4>
+                    <p id="card1-desc" class="text-sm sm:text-base text-gray-600 mb-4">A classic and comforting North Indian dish loved in every household.</p>
                 </div>
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
-                    <h4 class="text-lg sm:text-xl font-bold text-green-700 mb-2">Bhindi Masala</h4>
-                    <p class="text-sm sm:text-base text-gray-600 mb-4">Crispy okra cooked in a delicious blend of spices, perfect for roti or rice.</p>
+                    <h4 id="card2-title" class="text-lg sm:text-xl font-bold text-green-700 mb-2">Bhindi Masala</h4>
+                    <p id="card2-desc" class="text-sm sm:text-base text-gray-600 mb-4">Crispy okra cooked in a delicious blend of spices, perfect for roti or rice.</p>
                 </div>
                 <div class="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
-                    <h4 class="text-lg sm:text-xl font-bold text-green-700 mb-2">Palak Paneer</h4>
-                    <p class="text-sm sm:text-base text-gray-600 mb-4">A nutritious and creamy spinach gravy with cubes of paneer.</p>
+                    <h4 id="card3-title" class="text-lg sm:text-xl font-bold text-green-700 mb-2">Palak Paneer</h4>
+                    <p id="card3-desc" class="text-sm sm:text-base text-gray-600 mb-4">A nutritious and creamy spinach gravy with cubes of paneer.</p>
                 </div>
             </div>
         </div>
@@ -179,325 +140,403 @@
 
 
     <script type="module">
-        const ui = {
-            searchInput: document.getElementById('vegetable-search'),
-            searchBtn: document.getElementById('search-btn'),
-            scanInput: document.getElementById('vegetable-scan'),
-            scanBtn: document.getElementById('scan-btn'),
-            loader: document.getElementById('loader'),
-            recipesContainer: document.getElementById('recipes-container'),
-            errorMessage: document.getElementById('error-message'),
-            imagePreviewContainer: document.getElementById('image-preview-container'),
-            imagePreview: document.getElementById('image-preview'),
-            languageSelector: document.getElementById('language-selector'),
-            toast: document.getElementById('toast'),
-        };
-        
-        const synth = window.speechSynthesis;
-        let voices = [];
-        let voiceSupport = {};
+    const ui = {
+        searchInput: document.getElementById('vegetable-search'),
+        searchBtn: document.getElementById('search-btn'),
+        scanInput: document.getElementById('vegetable-scan'),
+        scanBtn: document.getElementById('scan-btn'),
+        loader: document.getElementById('loader'),
+        recipesContainer: document.getElementById('recipes-container'),
+        errorMessage: document.getElementById('error-message'),
+        imagePreviewContainer: document.getElementById('image-preview-container'),
+        imagePreview: document.getElementById('image-preview'),
+        languageSelector: document.getElementById('language-selector'),
+        toast: document.getElementById('toast'),
+    };
+    
+    const synth = window.speechSynthesis;
+    let voices = [];
+    let voiceSupport = {};
 
-        function checkVoiceSupport() {
-            voices = synth.getVoices();
-            if (voices.length === 0) return;
-            voiceSupport.hi = voices.some(v => v.lang.startsWith('hi'));
-            voiceSupport.en = voices.some(v => v.lang.startsWith('en'));
-            voiceSupport.as = voices.some(v => v.lang.startsWith('as'));
-            voiceSupport.bn = voices.some(v => v.lang.startsWith('bn'));
-            voiceSupport.bho = voices.some(v => v.lang.startsWith('bho'));
+    function checkVoiceSupport() {
+        voices = synth.getVoices();
+        if (voices.length === 0) return;
+        voiceSupport.hi = voices.some(v => v.lang.startsWith('hi'));
+        voiceSupport.en = voices.some(v => v.lang.startsWith('en'));
+        voiceSupport.as = voices.some(v => v.lang.startsWith('as'));
+        voiceSupport.bn = voices.some(v => v.lang.startsWith('bn'));
+        voiceSupport.bho = voices.some(v => v.lang.startsWith('bho'));
+    }
+    
+    checkVoiceSupport();
+    if (synth.onvoiceschanged !== undefined) {
+        synth.onvoiceschanged = checkVoiceSupport;
+    }
+
+    // जरूरी: सुरक्षा के लिए, एपीआई कुंजी को सर्वर-साइड प्रॉक्सी के माध्यम से उपयोग करें।
+    const apiKey = "AIzaSyBYTx4a6EjFdnG93NT-Npko_9D1BxEr2rA"; 
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+    
+    const jsonSchema = {
+        type: "ARRAY", items: {
+            type: "OBJECT", properties: {
+                "recipe_name": { "type": "STRING" }, 
+                "description": { "type": "STRING" },
+                "ingredients": { "type": "ARRAY", "items": { "type": "STRING" } },
+                "instructions": { "type": "ARRAY", "items": { "type": "STRING" } },
+                "Youtube_query": { "type": "STRING" }
+            }, required: ["recipe_name", "description", "ingredients", "instructions", "Youtube_query"]
         }
-        
-        checkVoiceSupport();
-        if (synth.onvoiceschanged !== undefined) {
-            synth.onvoiceschanged = checkVoiceSupport;
+    };
+
+    const translations = {
+        en: {
+            mainTitle: "Your New Companion in the Kitchen",
+            subtitle: "Don't know what to cook today? Just tell us the name of your vegetable or show us a photo, and our AI will give you an amazing Indian recipe in seconds!",
+            popularRecipesTitle: "Check Out Some Popular Recipes",
+            card1Title: "Aloo Gobi",
+            card1Desc: "A classic and comforting North Indian dish loved in every household.",
+            card2Title: "Bhindi Masala",
+            card2Desc: "Crispy okra cooked in a delicious blend of spices, perfect for roti or rice.",
+            card3Title: "Palak Paneer",
+            card3Desc: "A nutritious and creamy spinach gravy with cubes of paneer.",
+            textSearchLabel: "1. Enter vegetable name",
+            searchInputPlaceholder: "e.g., Potato, Tomato...", searchBtnText: "Find Recipes", imageScanLabel: "2. Or upload a photo",
+            scanBtnText: "Find from Photo", imagePreviewLabel: "Uploaded Photo:", loaderText: "Tamranga AI is crafting recipes for you... Please wait.",
+            errorNoVegName: "Please enter a vegetable name.", errorNoFile: "Please select a photo file.", errorNotImage: "Please select an image file (.jpg, .png).",
+            errorNoRecipe: "No recipes found for this vegetable.", errorGeneric: "An error occurred:", ingredientsHeader: "Ingredients",
+            instructionsHeader: "Instructions", listenBtnTooltip: "Listen to Recipe", stopBtnTooltip: "Stop Listening",
+            watchVideoBtnTooltip: "Watch Video", shareBtnTooltip: "Share Recipe", voiceNotAvailableTooltip: "Voice not available for this language",
+            recipeCopied: "Recipe copied to clipboard!", langCode: "en-US"
+        },
+        hi: {
+            mainTitle: "रसोई में आपका नया साथी",
+            subtitle: "समझ नहीं आ रहा कि आज क्या बनाएं? बस अपनी सब्ज़ी का नाम या फोटो हमें बताएं, और हमारा AI आपको कुछ ही सेकंड में एक अद्भुत भारतीय रेसिपी देगा!",
+            popularRecipesTitle: "कुछ लोकप्रिय रेसिपी देखें",
+            card1Title: "आलू गोभी",
+            card1Desc: "एक क्लासिक और आरामदायक उत्तर भारतीय व्यंजन जो हर घर में पसंद किया जाता है।",
+            card2Title: "भिंडी मसाला",
+            card2Desc: "मसालों के स्वादिष्ट मिश्रण में पकाई गई कुरकुरी भिंडी, रोटी या चावल के लिए एकदम सही है।",
+            card3Title: "पालक पनीर",
+            card3Desc: "पनीर के क्यूब्स के साथ एक पौष्टिक और मलाईदार पालक की ग्रेवी।",
+            textSearchLabel: "१. सब्ज़ी का नाम लिखें",
+            searchInputPlaceholder: "जैसे: आलू, टमाटर, गोभी...", searchBtnText: "रेसिपी खोजें", imageScanLabel: "२. या सब्ज़ी की फ़ोटो अपलोड करें",
+            scanBtnText: "फ़ोटो से रेसिपी खोजें", imagePreviewLabel: "अपलोड की गई फ़ोटो:", loaderText: "Tamranga AI आपके लिए रेसिपी बना रहा है... कृपया प्रतीक्षा करें।",
+            errorNoVegName: "कृपया सब्ज़ी का नाम दर्ज करें।", errorNoFile: "कृपया एक फ़ोटो फ़ाइल चुनें।", errorNotImage: "कृपया एक इमेज फ़ाइल (.jpg, .png) चुनें।",
+            errorNoRecipe: "इस सब्ज़ी के लिए कोई रेसिपी नहीं मिली।", errorGeneric: "एक त्रुटि हुई:", ingredientsHeader: "सामग्री",
+            instructionsHeader: "विधि", listenBtnTooltip: "रेसिपी सुनें", stopBtnTooltip: "सुनना बंद करें",
+            watchVideoBtnTooltip: "वीडियो देखें", shareBtnTooltip: "रेसिपी शेयर करें", voiceNotAvailableTooltip: "इस भाषा के लिए वॉइस उपलब्ध नहीं है",
+            recipeCopied: "रेसिपी क्लिपबोर्ड पर कॉपी हो गई!", langCode: "hi-IN"
+        },
+        as: {
+            mainTitle: "ৰান্ধনিঘৰত আপোনাৰ নতুন সংগী",
+            subtitle: "আজি কি ৰান্ধিব ভাবি পোৱা নাই? কেৱল আপোনাৰ পাচলিৰ নাম বা এখন ফটো দিয়ক, আৰু আমাৰ AIএ আপোনাক কেইছেকেণ্ডমানৰ ভিতৰতে এক সুস্বাদু ভাৰতীয় ৰেচিপি দিব!",
+            popularRecipesTitle: "কিছুমান জনপ্ৰিয় ৰেচিপি চাওক",
+            card1Title: "আলু গোবি",
+            card1Desc: "প্ৰতিটো পৰিয়ালত ভালপোৱা এক ক্লাছিক আৰু আৰামদায়ক উত্তৰ ভাৰতীয় ব্যঞ্জন।",
+            card2Title: "ভেণ্ডি মছলা",
+            card2Desc: "মছলাৰ সোৱাদযুক্ত মিশ্ৰণত বনোৱা মচমচীয়া ভেণ্ডি, ৰুটি বা ভাতৰ বাবে উপযুক্ত।",
+            card3Title: "পালক পনীৰ",
+            card3Desc: "পনীৰৰ টুকুৰাৰে তৈয়াৰী এক পুষ্টিকৰ আৰু ক্ৰীমি পালকৰ গ্ৰেভি।",
+            textSearchLabel: "১. পাচলিৰ নাম লিখক",
+            searchInputPlaceholder: "যেনে: আলু, বিলাহী, বন্ধাকবি...", searchBtnText: "ৰেচিপি বিচাৰক", imageScanLabel: "২. অথবা পাচলিৰ ফটো আপলোড কৰক",
+            scanBtnText: "ফটোৰ পৰা বিচাৰক", imagePreviewLabel: "আপলোড কৰা ফটো:", loaderText: "Tamranga AI আপোনাৰ বাবে ৰেচিপি তৈয়াৰ কৰি আছে... অনুগ্ৰহ কৰি অপেক্ষা কৰক।",
+            errorNoVegName: "অনুগ্ৰহ কৰি পাচলিৰ নাম দিয়ক।", errorNoFile: "অনুগ্ৰহ কৰি এখন ফটো ফাইল বাছনি কৰক।", errorNotImage: "অনুগ্ৰহ কৰি এখন ছবি ফাইল (.jpg, .png) বাছনি কৰক।",
+            errorNoRecipe: "এই পাচলিৰ বাবে কোনো ৰেচিপি পোৱা ন'গল।", errorGeneric: "এটা ত্ৰুটি হৈছে:", ingredientsHeader: "উপকৰণ",
+            instructionsHeader: "প্ৰণালী", listenBtnTooltip: "ৰেচিপি শুনক", stopBtnTooltip: "শুনা বন্ধ কৰক",
+            watchVideoBtnTooltip: "ভিডিঅ' চাওক", shareBtnTooltip: "ৰেচিপি শ্বেয়াৰ কৰক", voiceNotAvailableTooltip: "এই ভাষাৰ বাবে কণ্ঠ উপলব্ধ নহয়",
+            recipeCopied: "ৰেচিপি ক্লিপব'ৰ্ডত কপি কৰা হ'ল!", langCode: "as-IN"
+        },
+        bn: {
+            mainTitle: "রান্নাঘরে আপনার নতুন সঙ্গী",
+            subtitle: "আজ কি রান্না করবেন জানেন না? শুধু আপনার সবজির নাম বা একটি ছবি দিন, এবং আমাদের AI আপনাকে কয়েক সেকেন্ডের মধ্যে একটি দুর্দান্ত ভারতীয় রেসিপি দেবে!",
+            popularRecipesTitle: "কিছু জনপ্রিয় রেসিপি দেখুন",
+            card1Title: "আলু গোবি",
+            card1Desc: "প্রতিটি পরিবারে প্রিয় একটি ক্লাসিক এবং আরামদায়ক উত্তর ভারতীয় খাবার।",
+            card2Title: "ভিন্ডি মশলা",
+            card2Desc: "মশলার সুস্বাদু মিশ্রণে রান্না করা মুচমুচে ঢেঁড়স, রুটি বা ভাতের জন্য উপযুক্ত।",
+            card3Title: "পালক পনির",
+            card3Desc: "পনিরের টুকরো সহ একটি পুষ্টিকর এবং ক্রিমি পালং শাকের গ্রেভি।",
+            textSearchLabel: "১. সবজির নাম লিখুন",
+            searchInputPlaceholder: "যেমন: আলু, টমেটো, বাঁধাকপি...", searchBtnText: "রেসিপি খুঁজুন", imageScanLabel: "২. বা সবজির ছবি আপলোড করুন",
+            scanBtnText: "ছবি থেকে খুঁজুন", imagePreviewLabel: "আপলোড করা ছবি:", loaderText: "Tamranga AI আপনার জন্য রেসিপি তৈরি করছে... অনুগ্রহ করে অপেক্ষা করুন।",
+            errorNoVegName: "অনুগ্রহ করে একটি সবজির নাম লিখুন।", errorNoFile: "অনুগ্রহ করে একটি ফটো ফাইল নির্বাচন করুন।", errorNotImage: "অনুগ্রহ করে একটি চিত্র ফাইল (.jpg, .png) নির্বাচন করুন।",
+            errorNoRecipe: "এই সবজির জন্য কোন রেসিপি পাওয়া যায়নি।", errorGeneric: "একটি ত্রুটি ঘটেছে:", ingredientsHeader: "উপকরণ",
+            instructionsHeader: "নির্দেশাবলী", listenBtnTooltip: "রেসিপি শুনুন", stopBtnTooltip: "শোনা বন্ধ করুন",
+            watchVideoBtnTooltip: "ভিডিও দেখুন", shareBtnTooltip: "রেসিপি শেয়ার করুন", voiceNotAvailableTooltip: "এই ভাষার জন্য ভয়েস উপলব্ধ নয়",
+            recipeCopied: "রেসিপি ক্লিপবোর্ডে কপি করা হয়েছে!", langCode: "bn-IN"
+        },
+        bho: {
+            mainTitle: "रउरा रसोई में रउरा नया साथी",
+            subtitle: "बुझात नइखे कि आज का बनाईं? बस आपन सब्जी के नाम बताईं भा फोटो दिखाईं, आ हमार AI रउरा के कुछ सेकंड में एगो बढ़िया भारतीय रेसिपी दी!",
+            popularRecipesTitle: "कुछ लोकप्रिय रेसिपी देखीं",
+            card1Title: "आलू गोभी",
+            card1Desc: "एगो क्लासिक आ आरामदायक उत्तर भारतीय पकवान जवन हर घर में पसंद कइल जाला।",
+            card2Title: "भिंडी मसाला",
+            card2Desc: "मसाला के स्वादिष्ट मिश्रण में बनावल कुरकुरी भिंडी, रोटी भा भात खातिर उत्तम बा।",
+            card3Title: "पालक पनीर",
+            card3Desc: "पनीर के टुकड़ा के संगे एगो पौष्टिक आ मलाईदार पालक के ग्रेवी।",
+            textSearchLabel: "१. सब्जी के नाम लिखीं",
+            searchInputPlaceholder: "जइसे: आलू, टमाटर, गोभी...", searchBtnText: "रेसिपी खोजीं", imageScanLabel: "२. भा सब्जी के फोटो अपलोड करीं",
+            scanBtnText: "फोटो से खोजीं", imagePreviewLabel: "अपलोड कइल फोटो:", loaderText: "Tamranga AI रउरा खातिर रेसिपी बना रहल बा... कृपया इंतजार करीं।",
+            errorNoVegName: "कृपया सब्जी के नाम डालीं।", errorNoFile: "कृपया एगो फोटो फाइल चुनीं।", errorNotImage: "कृपया एगो इमेज फाइल (.jpg, .png) चुनीं।",
+            errorNoRecipe: "ई सब्जी खातिर कवनो रेसिपी ना मिलल।", errorGeneric: "एगो गलती भइल:", ingredientsHeader: "सामान",
+            instructionsHeader: "बनावे के तरीका", listenBtnTooltip: "रेसिपी सुनीं", stopBtnTooltip: "सुनल बंद करीं",
+            watchVideoBtnTooltip: "वीडियो देखीं", shareBtnTooltip: "रेसिपी साझा करीं", voiceNotAvailableTooltip: "ई भाषा खातिर आवाज उपलब्ध नइखे",
+            recipeCopied: "रेसिपी क्लिपबोर्ड पर कॉपी हो गइल!", langCode: "bho-IN"
         }
+    };
 
-        const apiKey = "AIzaSyBYTx4a6EjFdnG93NT-Npko_9D1BxEr2rA"; // IMPORTANT: For security, use a server-side proxy for the API key.
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
-        
-        const jsonSchema = {
-            type: "ARRAY", items: {
-                type: "OBJECT", properties: {
-                    "recipe_name": { "type": "STRING" }, 
-                    "description": { "type": "STRING" },
-                    "ingredients": { "type": "ARRAY", "items": { "type": "STRING" } },
-                    "instructions": { "type": "ARRAY", "items": { "type": "STRING" } },
-                    "Youtube_query": { "type": "STRING" }
-                }, required: ["recipe_name", "description", "ingredients", "instructions", "Youtube_query"]
-            }
-        };
+    function updateUI(lang) {
+        const t = translations[lang] || translations['en']; // अंग्रेजी पर वापस जाएं
+        document.documentElement.lang = lang;
+        document.getElementById('main-title').innerHTML = t.mainTitle;
+        document.getElementById('subtitle').innerHTML = t.subtitle;
+        document.getElementById('popular-recipes-title').innerHTML = t.popularRecipesTitle;
+        document.getElementById('card1-title').innerHTML = t.card1Title;
+        document.getElementById('card1-desc').innerHTML = t.card1Desc;
+        document.getElementById('card2-title').innerHTML = t.card2Title;
+        document.getElementById('card2-desc').innerHTML = t.card2Desc;
+        document.getElementById('card3-title').innerHTML = t.card3Title;
+        document.getElementById('card3-desc').innerHTML = t.card3Desc;
+        document.getElementById('text-search-label').textContent = t.textSearchLabel;
+        ui.searchInput.placeholder = t.searchInputPlaceholder;
+        document.getElementById('search-btn-text').textContent = t.searchBtnText;
+        document.getElementById('image-scan-label').textContent = t.imageScanLabel;
+        document.getElementById('scan-btn-text').textContent = t.scanBtnText;
+        document.getElementById('image-preview-label').textContent = t.imagePreviewLabel;
+        document.getElementById('loader-text').textContent = t.loaderText;
+        document.getElementById('toast').textContent = t.recipeCopied;
+    }
 
-        const translations = {
-             en: {
-                mainTitle: "Your New Companion in the Kitchen",
-                subtitle: "Don't know what to cook today? Just tell us the name of your vegetable or show us a photo, and our AI will give you an amazing Indian recipe in seconds!",
-                textSearchLabel: "1. Enter vegetable name",
-                searchInputPlaceholder: "e.g., Potato, Tomato...", searchBtnText: "Find Recipes", imageScanLabel: "2. Or upload a photo",
-                scanBtnText: "Find from Photo", imagePreviewLabel: "Uploaded Photo:", loaderText: "Tamranga AI is crafting recipes for you... Please wait.",
-                errorNoVegName: "Please enter a vegetable name.", errorNoFile: "Please select a photo file.", errorNotImage: "Please select an image file (.jpg, .png).",
-                errorNoRecipe: "No recipes found for this vegetable.", errorGeneric: "An error occurred:", ingredientsHeader: "Ingredients",
-                instructionsHeader: "Instructions", listenBtnTooltip: "Listen to Recipe", stopBtnTooltip: "Stop Listening",
-                watchVideoBtnTooltip: "Watch Video", shareBtnTooltip: "Share Recipe", voiceNotAvailableTooltip: "Voice not available for this language",
-                recipeCopied: "Recipe copied to clipboard!", langCode: "en-US"
-            },
-            hi: {
-                mainTitle: "रसोई में आपका नया साथी",
-                subtitle: "समझ नहीं आ रहा कि आज क्या बनाएं? बस अपनी सब्ज़ी का नाम या फोटो हमें बताएं, और हमारा AI आपको कुछ ही सेकंड में एक अद्भुत भारतीय रेसिपी देगा!",
-                textSearchLabel: "१. सब्ज़ी का नाम लिखें",
-                searchInputPlaceholder: "जैसे: आलू, टमाटर, गोभी...", searchBtnText: "रेसिपी खोजें", imageScanLabel: "२. या सब्ज़ी की फ़ोटो अपलोड करें",
-                scanBtnText: "फ़ोटो से रेसिपी खोजें", imagePreviewLabel: "अपलोड की गई फ़ोटो:", loaderText: "Tamranga AI आपके लिए रेसिपी बना रहा है... कृपया प्रतीक्षा करें।",
-                errorNoVegName: "कृपया सब्ज़ी का नाम दर्ज करें।", errorNoFile: "कृपया एक फ़ोटो फ़ाइल चुनें।", errorNotImage: "कृपया एक इमेज फ़ाइल (.jpg, .png) चुनें।",
-                errorNoRecipe: "इस सब्ज़ी के लिए कोई रेसिपी नहीं मिली।", errorGeneric: "एक त्रुटि हुई:", ingredientsHeader: "सामग्री",
-                instructionsHeader: "विधि", listenBtnTooltip: "रेसिपी सुनें", stopBtnTooltip: "सुनना बंद करें",
-                watchVideoBtnTooltip: "वीडियो देखें", shareBtnTooltip: "रेसिपी शेयर करें", voiceNotAvailableTooltip: "इस भाषा के लिए वॉइस उपलब्ध नहीं है",
-                recipeCopied: "रेसिपी क्लिपबोर्ड पर कॉपी हो गई!", langCode: "hi-IN"
-            },
-            // ... other languages remain the same
-        };
+    ui.languageSelector.addEventListener('change', (e) => {
+        updateUI(e.target.value);
+        clearResults();
+    });
+    ui.searchBtn.addEventListener('click', handleTextSearch);
+    ui.scanBtn.addEventListener('click', handleImageScan);
+    ui.scanInput.addEventListener('change', showImagePreview);
 
-        function updateUI(lang) {
-            const t = translations[lang];
-            document.documentElement.lang = lang;
-            document.getElementById('main-title').innerHTML = t.mainTitle;
-            document.getElementById('subtitle').innerHTML = t.subtitle;
-            document.getElementById('text-search-label').textContent = t.textSearchLabel;
-            ui.searchInput.placeholder = t.searchInputPlaceholder;
-            document.getElementById('search-btn-text').textContent = t.searchBtnText;
-            document.getElementById('image-scan-label').textContent = t.imageScanLabel;
-            document.getElementById('scan-btn-text').textContent = t.scanBtnText;
-            document.getElementById('image-preview-label').textContent = t.imagePreviewLabel;
-            document.getElementById('loader-text').textContent = t.loaderText;
-            document.getElementById('toast').textContent = t.recipeCopied;
+    updateUI('en'); // डिफ़ॉल्ट भाषा अंग्रेजी सेट करें
+
+    function showImagePreview() {
+        const file = ui.scanInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                ui.imagePreview.src = e.target.result;
+                ui.imagePreviewContainer.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
         }
+    }
 
-        ui.languageSelector.addEventListener('change', (e) => {
-            updateUI(e.target.value);
-            clearResults();
+    function getPrompt(vegetableName, language) {
+        const langName = new Intl.DisplayNames(['en'], { type: 'language' }).of(language);
+        return `Please provide two simple and popular Indian recipes for "${vegetableName}". For each recipe, also provide a simple, effective Youtube query in English in the "Youtube_query" field to find a video of that recipe. Respond with the recipe details (name, description, ingredients, instructions) only in the ${langName} language.`;
+    }
+
+    async function handleTextSearch() {
+        const vegetableName = ui.searchInput.value.trim();
+        const lang = ui.languageSelector.value;
+        if (!vegetableName) {
+            showError(translations[lang].errorNoVegName);
+            return;
+        }
+        const prompt = getPrompt(vegetableName, lang);
+        await callApi(prompt, null);
+    }
+
+    async function handleImageScan() {
+        const file = ui.scanInput.files[0];
+        const lang = ui.languageSelector.value;
+        if (!file) {
+            showError(translations[lang].errorNoFile); return;
+        }
+        if (!file.type.startsWith("image/")) {
+            showError(translations[lang].errorNotImage); return;
+        }
+        const base64ImageData = await fileToBase64(file);
+        const langName = new Intl.DisplayNames(['en'], { type: 'language' }).of(lang);
+        const prompt = `Identify the vegetable in this image and provide two simple and popular Indian recipes for it. For each recipe, also provide a simple, effective Youtube query in English in the "Youtube_query" field to find a video. Respond with the recipe details (name, description, ingredients, instructions) only in the ${langName} language.`;
+        await callApi(prompt, base64ImageData);
+    }
+
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = error => reject(error);
         });
-        ui.searchBtn.addEventListener('click', handleTextSearch);
-        ui.scanBtn.addEventListener('click', handleImageScan);
-        ui.scanInput.addEventListener('change', showImagePreview);
+    }
 
-        updateUI('en'); // Set default language to English
-
-        function showImagePreview() {
-            const file = ui.scanInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    ui.imagePreview.src = e.target.result;
-                    ui.imagePreviewContainer.classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
+    async function callApi(promptText, base64ImageData) {
+        showLoader(true);
+        clearResults();
+        let parts = [{ text: promptText }];
+        if (base64ImageData) {
+            parts.push({ inlineData: { mimeType: "image/jpeg", data: base64ImageData } });
         }
-
-        function getPrompt(vegetableName, language) {
-            const langName = new Intl.DisplayNames(['en'], { type: 'language' }).of(language);
-            return `Please provide two simple and popular Indian recipes for "${vegetableName}". For each recipe, also provide a simple, effective Youtube query in English in the "Youtube_query" field to find a video of that recipe. Respond with the recipe details (name, description, ingredients, instructions) only in the ${langName} language.`;
-        }
-
-        async function handleTextSearch() {
-            const vegetableName = ui.searchInput.value.trim();
-            const lang = ui.languageSelector.value;
-            if (!vegetableName) {
-                showError(translations[lang].errorNoVegName);
-                return;
-            }
-            const prompt = getPrompt(vegetableName, lang);
-            await callApi(prompt, null);
-        }
-
-        async function handleImageScan() {
-            const file = ui.scanInput.files[0];
-            const lang = ui.languageSelector.value;
-            if (!file) {
-                showError(translations[lang].errorNoFile); return;
-            }
-            if (!file.type.startsWith("image/")) {
-                showError(translations[lang].errorNotImage); return;
-            }
-            const base64ImageData = await fileToBase64(file);
-            const langName = new Intl.DisplayNames(['en'], { type: 'language' }).of(lang);
-            const prompt = `Identify the vegetable in this image and provide two simple and popular Indian recipes for it. For each recipe, also provide a simple, effective Youtube query in English in the "Youtube_query" field to find a video. Respond with the recipe details (name, description, ingredients, instructions) only in the ${langName} language.`;
-            await callApi(prompt, base64ImageData);
-        }
-
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result.split(',')[1]);
-                reader.onerror = error => reject(error);
+        const payload = {
+            contents: [{ parts: parts }],
+            generationConfig: { responseMimeType: "application/json", responseSchema: jsonSchema },
+        };
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
             });
-        }
-
-        async function callApi(promptText, base64ImageData) {
-            showLoader(true);
-            clearResults();
-            let parts = [{ text: promptText }];
-            if (base64ImageData) {
-                parts.push({ inlineData: { mimeType: "image/jpeg", data: base64ImageData } });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error.message || `HTTP error! status: ${response.status}`);
             }
-            const payload = {
-                contents: [{ parts: parts }],
-                generationConfig: { responseMimeType: "application/json", responseSchema: jsonSchema },
-            };
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
-                });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error.message || `HTTP error! status: ${response.status}`);
-                }
-                const result = await response.json();
-                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (jsonText) {
-                    const recipes = JSON.parse(jsonText);
-                    displayRecipes(recipes);
-                } else {
-                     throw new Error(translations[ui.languageSelector.value].errorNoRecipe);
-                }
-            } catch (error) {
-                console.error("API Error:", error);
-                showError(`${translations[ui.languageSelector.value].errorGeneric} ${error.message}`);
-            } finally {
-                showLoader(false);
-            }
-        }
-
-        function displayRecipes(recipes) {
-            const lang = ui.languageSelector.value;
-            const t = translations[lang];
-            if (!recipes || recipes.length === 0) {
-                 showError(t.errorNoRecipe); return;
-            }
-            recipes.forEach((recipe) => {
-                const card = document.createElement('div');
-                card.className = 'recipe-card bg-white p-6 rounded-xl shadow-md border border-gray-200 relative';
-                const ingredientsHtml = recipe.ingredients.map(ing => `<li class="text-gray-600">${ing}</li>`).join('');
-                const instructionsHtml = recipe.instructions.map(step => `<li class="text-gray-600">${step}</li>`).join('');
-                
-                const youtubeUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(recipe.Youtube_query)}`;
-                
-                card.innerHTML = `
-                    <div class="absolute top-4 right-4 flex items-center space-x-2">
-                        <button class="listen-btn text-gray-500 hover:text-green-600 transition-colors" title="${t.listenBtnTooltip}">
-                            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm7-.17v6.34L7.83 13H5v-2h2.83L10 8.83zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-                        </button>
-                        <a href="${youtubeUrl}" target="_blank" class="video-btn text-gray-500 hover:text-red-600 transition-colors" title="${t.watchVideoBtnTooltip}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.185A4.862 4.862 0 0015.138 1.15C12.94 1.15 12 1.15 12 1.15s-.94 0-3.138 0c-4.477 0-4.862.385-4.862 4.862C4 8.085 4 12 4 12s0 3.915.002 5.953c0 4.477.385 4.862 4.862 4.862 2.198 0 3.138.002 3.138.002s.94 0 3.138 0c4.477 0 4.862-.385 4.862-4.862C19.998 15.915 20 12 20 12s0-3.915-.385-5.815zM10 15.5v-7l5 3.5-5 3.5z"/></svg>
-                        </a>
-                        <button class="share-btn text-gray-500 hover:text-blue-600 transition-colors" title="${t.shareBtnTooltip}">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg>
-                        </button>
-                    </div>
-                    <h3 class="text-2xl font-bold text-green-700 mb-2 pr-28">${recipe.recipe_name}</h3>
-                    <p class="text-gray-500 mb-4">${recipe.description}</p>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <div>
-                            <h4 class="text-lg font-semibold text-gray-800 border-b-2 border-green-200 pb-1 mb-2">${t.ingredientsHeader}</h4>
-                            <ul class="list-disc list-inside space-y-1">${ingredientsHtml}</ul>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-semibold text-gray-800 border-b-2 border-green-200 pb-1 mb-2">${t.instructionsHeader}</h4>
-                            <ol class="list-decimal list-inside space-y-1">${instructionsHtml}</ol>
-                        </div>
-                    </div>
-                `;
-                const listenButton = card.querySelector('.listen-btn');
-                const shareButton = card.querySelector('.share-btn');
-                
-                if (!voiceSupport[lang]) {
-                    listenButton.disabled = true;
-                    listenButton.title = t.voiceNotAvailableTooltip;
-                } else {
-                    listenButton.addEventListener('click', () => handleListenClick(listenButton, recipe));
-                }
-                
-                shareButton.addEventListener('click', () => handleShareClick(recipe));
-                
-                ui.recipesContainer.appendChild(card);
-            });
-        }
-        
-        function handleListenClick(button, recipe) {
-            const lang = ui.languageSelector.value;
-            const t = translations[lang];
-            if (synth.speaking && button.classList.contains('speaking')) {
-                synth.cancel(); return;
-            }
-            if (synth.speaking) {
-                synth.cancel();
-            }
-            const textToSpeak = `${recipe.recipe_name}. ${recipe.description}. ${t.ingredientsHeader}: ${recipe.ingredients.join(', ')}. ${t.instructionsHeader}: ${recipe.instructions.join('. ')}.`;
-            const utterance = new SpeechSynthesisUtterance(textToSpeak);
-            utterance.lang = t.langCode;
-            const voice = voices.find(v => v.lang.startsWith(lang));
-            if (voice) utterance.voice = voice;
-            utterance.onstart = () => {
-                document.querySelectorAll('.listen-btn').forEach(btn => btn.classList.remove('speaking'));
-                button.classList.add('speaking');
-                button.title = t.stopBtnTooltip;
-            };
-            utterance.onend = () => {
-                button.classList.remove('speaking');
-                button.title = t.listenBtnTooltip;
-            };
-            synth.speak(utterance);
-        }
-
-        async function handleShareClick(recipe) {
-            const lang = ui.languageSelector.value;
-            const t = translations[lang];
-
-            const shareText = `🥬 ${recipe.recipe_name}\n\n${recipe.description}\n\n📝 ${t.ingredientsHeader}:\n- ${recipe.ingredients.join('\n- ')}\n\n🍳 ${t.instructionsHeader}:\n${recipe.instructions.map((step, i) => `${i+1}. ${step}`).join('\n')}`;
-
-            const shareData = {
-                title: `Tamranga AI Recipe: ${recipe.recipe_name}`,
-                text: shareText,
-                url: window.location.href,
-            };
-
-            if (navigator.share) {
-                try {
-                   await navigator.share(shareData);
-                } catch (err) {
-                   console.error("Share failed:", err);
-                }
+            const result = await response.json();
+            const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (jsonText) {
+                const recipes = JSON.parse(jsonText);
+                displayRecipes(recipes);
             } else {
-                // Fallback for desktop: Copy to clipboard
-                try {
-                    await navigator.clipboard.writeText(shareText);
-                    showToast(t.recipeCopied);
-                } catch (err) {
-                    console.error("Fallback copy failed:", err);
-                    alert("Failed to copy recipe.");
-                }
+                throw new Error(translations[ui.languageSelector.value].errorNoRecipe);
             }
+        } catch (error) {
+            console.error("API Error:", error);
+            showError(`${translations[ui.languageSelector.value].errorGeneric} ${error.message}`);
+        } finally {
+            showLoader(false);
         }
+    }
 
-        function showToast(message) {
-            const currentLang = ui.languageSelector.value;
-            ui.toast.textContent = translations[currentLang].recipeCopied;
-            ui.toast.classList.remove('opacity-0');
-            setTimeout(() => {
-                ui.toast.classList.add('opacity-0');
-            }, 3000);
+    function displayRecipes(recipes) {
+        const lang = ui.languageSelector.value;
+        const t = translations[lang];
+        if (!recipes || recipes.length === 0) {
+            showError(t.errorNoRecipe); return;
         }
-
-        // Helper functions
-        function showLoader(isLoading) { ui.loader.classList.toggle('hidden', !isLoading); }
-        function showError(message) { ui.errorMessage.textContent = message; ui.errorMessage.classList.remove('hidden'); }
-        function clearResults() {
+        recipes.forEach((recipe) => {
+            const card = document.createElement('div');
+            card.className = 'recipe-card bg-white p-6 rounded-xl shadow-md border border-gray-200 relative';
+            const ingredientsHtml = recipe.ingredients.map(ing => `<li class="text-gray-600">${ing}</li>`).join('');
+            const instructionsHtml = recipe.instructions.map(step => `<li class="text-gray-600">${step}</li>`).join('');
+            
+            // **फिक्स**: सही यूट्यूब खोज यूआरएल
+            const youtubeUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(recipe.Youtube_query)}`;
+            
+            card.innerHTML = `
+                <div class="absolute top-4 right-4 flex items-center space-x-2">
+                    <button class="listen-btn text-gray-500 hover:text-green-600 transition-colors" title="${t.listenBtnTooltip}">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm7-.17v6.34L7.83 13H5v-2h2.83L10 8.83zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                    </button>
+                    <a href="${youtubeUrl}" target="_blank" class="video-btn text-gray-500 hover:text-red-600 transition-colors" title="${t.watchVideoBtnTooltip}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.185A4.862 4.862 0 0015.138 1.15C12.94 1.15 12 1.15 12 1.15s-.94 0-3.138 0c-4.477 0-4.862.385-4.862 4.862C4 8.085 4 12 4 12s0 3.915.002 5.953c0 4.477.385 4.862 4.862 4.862 2.198 0 3.138.002 3.138.002s.94 0 3.138 0c4.477 0 4.862-.385 4.862-4.862C19.998 15.915 20 12 20 12s0-3.915-.385-5.815zM10 15.5v-7l5 3.5-5 3.5z"/></svg>
+                    </a>
+                    <button class="share-btn text-gray-500 hover:text-blue-600 transition-colors" title="${t.shareBtnTooltip}">
+                       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3s3-1.34 3-3-1.34-3-3-3z"/></svg>
+                    </button>
+                </div>
+                <h3 class="text-2xl font-bold text-green-700 mb-2 pr-28">${recipe.recipe_name}</h3>
+                <p class="text-gray-500 mb-4">${recipe.description}</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 border-b-2 border-green-200 pb-1 mb-2">${t.ingredientsHeader}</h4>
+                        <ul class="list-disc list-inside space-y-1">${ingredientsHtml}</ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 border-b-2 border-green-200 pb-1 mb-2">${t.instructionsHeader}</h4>
+                        <ol class="list-decimal list-inside space-y-1">${instructionsHtml}</ol>
+                    </div>
+                </div>
+            `;
+            const listenButton = card.querySelector('.listen-btn');
+            const shareButton = card.querySelector('.share-btn');
+            
+            if (!voiceSupport[lang]) {
+                listenButton.disabled = true;
+                listenButton.title = t.voiceNotAvailableTooltip;
+            } else {
+                listenButton.addEventListener('click', () => handleListenClick(listenButton, recipe));
+            }
+            
+            shareButton.addEventListener('click', () => handleShareClick(recipe));
+            
+            ui.recipesContainer.appendChild(card);
+        });
+    }
+    
+    function handleListenClick(button, recipe) {
+        const lang = ui.languageSelector.value;
+        const t = translations[lang] || translations['en'];
+        if (synth.speaking && button.classList.contains('speaking')) {
+            synth.cancel(); return;
+        }
+        if (synth.speaking) {
             synth.cancel();
-            ui.recipesContainer.innerHTML = '';
-            ui.errorMessage.classList.add('hidden');
-            if(!ui.scanInput.files[0]) {
-               ui.imagePreviewContainer.classList.add('hidden');
+        }
+        const textToSpeak = `${recipe.recipe_name}. ${recipe.description}. ${t.ingredientsHeader}: ${recipe.ingredients.join(', ')}. ${t.instructionsHeader}: ${recipe.instructions.join('. ')}.`;
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = t.langCode;
+        const voice = voices.find(v => v.lang.startsWith(lang));
+        if (voice) utterance.voice = voice;
+        utterance.onstart = () => {
+            document.querySelectorAll('.listen-btn').forEach(btn => btn.classList.remove('speaking'));
+            button.classList.add('speaking');
+            button.title = t.stopBtnTooltip;
+        };
+        utterance.onend = () => {
+            button.classList.remove('speaking');
+            button.title = t.listenBtnTooltip;
+        };
+        synth.speak(utterance);
+    }
+
+    async function handleShareClick(recipe) {
+        const lang = ui.languageSelector.value;
+        const t = translations[lang] || translations['en'];
+
+        const shareText = `🥬 ${recipe.recipe_name}\n\n${recipe.description}\n\n📝 ${t.ingredientsHeader}:\n- ${recipe.ingredients.join('\n- ')}\n\n🍳 ${t.instructionsHeader}:\n${recipe.instructions.map((step, i) => `${i+1}. ${step}`).join('\n')}`;
+
+        const shareData = {
+            title: `Tamranga AI Recipe: ${recipe.recipe_name}`,
+            text: shareText,
+            url: window.location.href,
+        };
+
+        if (navigator.share) {
+            try {
+               await navigator.share(shareData);
+            } catch (err) {
+               console.error("Share failed:", err);
+            }
+        } else {
+            try {
+                await navigator.clipboard.writeText(shareText);
+                showToast(t.recipeCopied);
+            } catch (err) {
+                console.error("Fallback copy failed:", err);
+                alert("Failed to copy recipe.");
             }
         }
-    </script>
+    }
+
+    function showToast(message) {
+        const currentLang = ui.languageSelector.value;
+        ui.toast.textContent = translations[currentLang].recipeCopied;
+        ui.toast.classList.remove('opacity-0');
+        setTimeout(() => {
+            ui.toast.classList.add('opacity-0');
+        }, 3000);
+    }
+
+    function showLoader(isLoading) { ui.loader.classList.toggle('hidden', !isLoading); }
+    function showError(message) { ui.errorMessage.textContent = message; ui.errorMessage.classList.remove('hidden'); }
+    function clearResults() {
+        synth.cancel();
+        ui.recipesContainer.innerHTML = '';
+        ui.errorMessage.classList.add('hidden');
+        if(!ui.scanInput.files[0]) {
+           ui.imagePreviewContainer.classList.add('hidden');
+        }
+    }
+</script>
 </body>
 </html>
+```
